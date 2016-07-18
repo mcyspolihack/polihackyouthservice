@@ -1,0 +1,218 @@
+<html>
+<head>
+
+<!-- Bootstrap -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
+    <script src='map.js'></script>
+
+
+    
+     
+
+</head>
+
+<body>
+    <style>
+        .btn
+        {
+            width:100%;
+            background-color: ;
+        }
+    </style>
+<div class = "container">
+    <h3>Hi!</h3>
+    
+    <p>Click the polygons below to learn about the youth programs in them.</p>
+    <p>Use the buttons below the maps to search through programs by category.</p>
+
+    <hr>
+    <div id = "mapid" style = "height:400px" style = "border-radius:5px"></div>
+    <hr>
+    <div class = "row">
+        <div class = "col-xs-3">
+        <div class = "btn btn-lg btn-primary" id = "yj" style = "z-index:50; position: relative" >Youth Justice System</div>
+        </div>
+        <div class = "col-xs-3">
+        <div class = "btn btn-lg btn-primary" id = "ac" style = "z-index:50; position: relative" >Arts and Culture</div>    
+        </div>
+        <div class = "col-xs-3">
+        <div class = "btn btn-lg btn-primary" id = "ce" style = "z-index:50; position: relative" >Civic Engagement</div>    
+        </div>
+        <div class = "col-xs-3">
+        <div class = "btn btn-lg btn-primary" id = "edu" style = "z-index:50; position: relative" >Education/Skills Development</div>    
+        </div>
+    </div>
+    <div class = "row">
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "emp" style = "z-index:50; position: relative" >Employment</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "env" style = "z-index:50; position: relative" >Environment</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "fai" style = "z-index:50; position: relative" >Faith</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "fam" style = "z-index:50; position: relative" >Family Well-Being</div></div>
+    </div>
+    <div class = "row">
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "food" style = "z-index:50; position: relative" >Food Security</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "house" style = "z-index:50; position: relative" >Housing</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "imm" style = "z-index:50; position: relative" >Immigration and Citizenship</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "int" style = "z-index:50; position: relative" >Intimate Partner Violence</div></div>    
+    </div>
+    <div class = "row">
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "mental" style = "z-index:50; position: relative" >Mental Health</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "mentor" style = "z-index:50; position: relative" >Mentorship</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "other" style = "z-index:50; position: relative" >Other</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "phys" style = "z-index:50; position: relative" >Physical Health</div></div>    
+    </div>
+    <div class = "row">
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "rec" style = "z-index:50; position: relative" >Recreation/Sports</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "sex" style = "z-index:50; position: relative" >Sexual Violence</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "sexg" style = "z-index:50; position: relative" >Sexuality and Gender Issues</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "soc" style = "z-index:50; position: relative" >Social Enterprise</div></div>    
+    </div>
+    <div class = "row">
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "subs" style = "z-index:50; position: relative" >Substance Use Issues</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "par" style = "z-index:50; position: relative" >Support for Young Parents</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "vio" style = "z-index:50; position: relative" >Violence Prevention</div></div>    
+        <div class = "col-xs-3"><div class = "btn btn-lg btn-primary" id = "vol" style = "z-index:50; position: relative" >Volunteering</div></div>    
+    </div>
+</div>
+
+
+    <script>
+
+        var mymap = L.map('mapid').setView([43.7, -79.4], 4);
+
+        var points = uploadFile("dat.geojson");
+        var pointsLayer = L.geoJson(points);
+        console.log(points)
+        console.log(pointsLayer)
+
+        var poly = uploadFile("polydat.geojson");
+        console.log(poly);
+        var polyLayer = L.geoJson(poly,{onEachFeature: onEachFeature, style: {weight: 1}}).addTo(mymap);
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFja2VuemllbiIsImEiOiJjaW1pbTZmMWwwMGU1dTFrcW0wenNiNGZ0In0.ys8ti05bu3iKf06cK9r82Q', {
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                id: 'mapbox.light',
+                accessToken: 'pk.eyJ1IjoibWFja2VuemllbiIsImEiOiJjaW1pbTZmMWwwMGU1dTFrcW0wenNiNGZ0In0.ys8ti05bu3iKf06cK9r82Q'
+            }).addTo(mymap);
+
+
+        $(document).ready(function(){
+            $("#yj").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [(Youth) Justice System Involvement/Re-integration Supports (e.g. youth criminal offenders)]")
+                } )  
+             $("#ac").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Arts & Culture]")
+                } )  
+             $("#ce").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Civic Engagement (e.g. voter participation)]")
+                } ) 
+             $("#edu").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Education/Skills Development]")
+                } ) 
+             $("#emp").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Employment/Entrepreneurship]")
+                } ) 
+             $("#env").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Environmental/Nature Conservation]")
+                } ) 
+             $("#fai").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Faith-based]")
+                } ) 
+             $("#fam").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Family Well-being (e.g. intergenerational issues)]")
+                } ) 
+             $("#food").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Food Security]")
+                } ) 
+             $("#house").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Housing]")
+                } ) 
+             $("#imm").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Immigration & Citizenship (e.g. settlement services)]")
+                } ) 
+             $("#int").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Intimate Partner Violence]")
+                } ) 
+             $("#mental").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Mental Health & Well-being]")
+                } ) 
+             $("#mentor").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Mentorship]")
+                } ) 
+             $("#other").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Other (please specify)]")
+                } ) 
+             $("#phys").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Physical Health & Well-being]")
+                } ) 
+             $("#rec").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Recreation/Sports]")
+                } ) 
+             $("#sex").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Sexual Violence]")
+                } ) 
+             $("#sexg").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Sexuality & Gender Issues]")
+                } ) 
+             $("#soc").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Social Enterprise]")
+                } ) 
+             $("#subs").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Substance Use Issues]")
+                } ) 
+             $("#par").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Support for young parents]")
+                } ) 
+             $("#vio").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Violence Prevention/Intervention/Gang Exit]")
+                } ) 
+             $("#vol").click(function()
+                {
+                    pickPoints(pointsLayer, "[q4] Which of the following categories most accurately describes the services you provide? [Volunteering]")
+                } ) 
+        })
+        
+
+    </script>
+
+    
+
+
+</body>
+</html>
